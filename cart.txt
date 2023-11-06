@@ -1,0 +1,3 @@
+Pecivo z pekarny;148.10;FOOD
+Pecivo z pekarny;84.5;FOOD
+Tekute mydlo (250 ml);135.0;CONSUMABLES
