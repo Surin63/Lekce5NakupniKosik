@@ -21,12 +21,14 @@ public class Cart {
     }
     public static Cart loadFromFile(String filename) throws CartException {
         Cart result = new Cart();
+        int lineNumber=1;       //Pocitani radku v souboru aby sme nasli kde je chyba
 
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(filename)))) { //Otevri soubor
             while (scanner.hasNextLine()) { //Dokud je k dispozici dalsi radek
                 String line = scanner.nextLine(); // Nacti radek ze souboru
                 //System.out.println(line);       //Vypis radek na obrazovku
-                parseLine(line, result);
+                parseLine(line, result, lineNumber);
+               lineNumber++;
             }
         } catch (FileNotFoundException e) {
             throw new CartException("Nepodarilo se nalezt soubour " + filename + ": " + e.getLocalizedMessage());
@@ -35,17 +37,26 @@ public class Cart {
         return result;
     }
 
-    private static void parseLine(String line, Cart cart) throws CartException {
-        String[] blocks = line.split(";");
-        int numOfBlocks = blocks.length;
+    private static void parseLine(String line, Cart cart, int lineNumber) throws CartException {
+        String[] blocks = line.split(";");  //Rozdeli radek na bloky podle oddelovace
+        int numOfBlocks = blocks.length;        // Zkontroluje spravny pocet bloku
         if(numOfBlocks != 3) {
             throw new CartException(
                     "Nespravny pocet polozek na radku: " +line+
                             "! Pocet polozek: "+numOfBlocks+".");
         }
-        String description = blocks[0];
-        BigDecimal price = new BigDecimal(blocks[1]);
-        Category category = Category.valueOf(blocks[2]);
+        String description = blocks[0].trim();     //Preved textove polozky na objekty
+        BigDecimal price;
+        try {
+            price = new BigDecimal(blocks[1].trim());
+        }catch (NumberFormatException e) {
+            throw new CartException("Chybne zadane cislo "+blocks[1]+" na radku c. "+lineNumber+": "+line+"!");
+        }
+        Category category = Category.valueOf(blocks[2].trim());
+        //Prevod: cele cislo: Integer.parseInt(blocks[0].trim());
+        //Prevod: datum: LocalDAte.parse(blocks[0].trim());
+        Item newItem = new Item(description, price, category);  //Vytvor objekt Item
+        cart.addItem(newItem);                              // Uloz vytvoreny objekt do kosiku
     }
 
     public void addItem(Item newItem) {listOfItems.add(newItem);}

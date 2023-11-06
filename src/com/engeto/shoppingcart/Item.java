@@ -52,7 +52,7 @@ public class Item {
     public String toString() {
         return "Polozka: " +
                  description +
-                ", " + price + " Kc" +
+                " " + price + " Kc" +
                 " (" + category + ")";
 
     }

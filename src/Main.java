@@ -38,9 +38,6 @@ public class Main {
                 new Item("Tekute mydlo (250ml)", BigDecimal.valueOf(89.9),
                         Category.CONSUMABLES));
         System.out.println(shoppingCart.getItem(0));
-        //Prevod: cele cislo: Integer.parseInt(blocks[0]);
-        //Prevod: datum: LocalDAte.parse(blocks[0]);
-        Item newItem = new Item(description, price, category);
-        cart.addItem(newItem);
+
     }
 }
