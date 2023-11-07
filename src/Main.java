@@ -1,7 +1,4 @@
-import com.engeto.shoppingcart.Cart;
-import com.engeto.shoppingcart.CartException;
-import com.engeto.shoppingcart.Category;
-import com.engeto.shoppingcart.Item;
+import com.engeto.shoppingcart.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,17 +6,22 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
         //Cart shoppingCart = new Cart();
        // fillItems(shoppingCart);
-        Cart shoppingCart;
+        Cart shoppingCart = new Cart();
         try {
-            shoppingCart = Cart.loadFromFile("cart.txt");
+            shoppingCart = Cart.loadFromFile(Settings.defaultFileName());
             System.out.println(shoppingCart.getListOfItems());
         } catch (CartException e) {
             System.err.println("Chyba pri cteni ze souboru: "+e.getLocalizedMessage());
         }
-
+        shoppingCart.addItem(new Item("Pokus", BigDecimal.valueOf(156)));
+        try {
+            Cart.saveToFile(Settings.defaultFileName(), shoppingCart);
+        } catch (CartException e) {
+            System.err.println("Chyba pri zapisu ze souboru: "+e.getLocalizedMessage());;
+        }
 
 
     }

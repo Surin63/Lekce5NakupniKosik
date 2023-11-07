@@ -8,9 +8,15 @@ public enum Category {
     Category(String description) {
         this.description = description;
     }
-
-    @Override
-    public String toString() {
-        return  description;
+    public String getDescription(){
+        return description;
     }
+
+    // Pri cteni a zapisu do souboru neni vhodne prekryt metodu
+    //toString(. Radeji si vytvorime metodu getDescription()
+    //a tu budeme volat, kdyz chceme vystup formatovany pro uzivatele
+   // @Override
+   // public String toString() {
+   //     return  description;
+    //}
 }

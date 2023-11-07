@@ -53,7 +53,7 @@ public class Item {
         return "Polozka: " +
                  description +
                 " " + price + " Kc" +
-                " (" + category + ")";
+                " (" + category.getDescription() + ")";
 
     }
 }

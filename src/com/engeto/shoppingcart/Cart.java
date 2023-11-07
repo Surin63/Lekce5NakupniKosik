@@ -1,8 +1,6 @@
 package com.engeto.shoppingcart;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,7 +36,7 @@ public class Cart {
     }
 
     private static void parseLine(String line, Cart cart, int lineNumber) throws CartException {
-        String[] blocks = line.split(";");  //Rozdeli radek na bloky podle oddelovace
+        String[] blocks = line.split(Settings.fileItemDelimiter());  //Rozdeli radek na bloky podle oddelovace
         int numOfBlocks = blocks.length;        // Zkontroluje spravny pocet bloku
         if(numOfBlocks != 3) {
             throw new CartException(
@@ -57,6 +55,19 @@ public class Cart {
         //Prevod: datum: LocalDAte.parse(blocks[0].trim());
         Item newItem = new Item(description, price, category);  //Vytvor objekt Item
         cart.addItem(newItem);                              // Uloz vytvoreny objekt do kosiku
+    }
+
+    public static void saveToFile(String filename, Cart cart) throws CartException {
+        try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(filename)))) {
+            for (Item item : cart.listOfItems) {
+                writer.println(item.getDescription()+
+                        Settings.fileItemDelimiter()+ item.getPrice()+
+                        Settings.fileItemDelimiter()+ item.getCategory());
+
+            }
+        } catch (IOException e) {
+            throw new CartException("Chyba pri zapisu do souboru '"+filename+"': "+e.getLocalizedMessage());
+        }
     }
 
     public void addItem(Item newItem) {listOfItems.add(newItem);}
